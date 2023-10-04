@@ -1,0 +1,20 @@
+{
+  "name": "institute-of-edu",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^4.4.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "firebase": "^10.4.0",
+    "openai": "^4.11.1",
+    "youtube-transcript": "^1.0.6"
+  }
+}
