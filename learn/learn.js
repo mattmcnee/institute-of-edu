@@ -37,3 +37,11 @@ function parseDuration(duration) {
 loadVideoDetails(testVideoId, testAPI_KEY);
 
 console.log("hello")
+
+if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+    // Code is running on localhost
+    console.log("Running on localhost");
+} else {
+    // Code is not running on localhost
+    console.log("Not running on localhost");
+}
