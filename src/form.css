@@ -1,4 +1,4 @@
-.react-form .form-container{
+.react-form{
 	padding-top: 10px;
 }
 
@@ -83,11 +83,11 @@
 	border-right: 1px solid grey;
 }
 
-.react-form .input-area textarea::placeholder, .input-area input::placeholder{
+.react-form .input-area textarea::placeholder, .react-form .input-area input::placeholder{
   color: #555;
 }
 
-.react-form .input-area button.top-input, .add-input button{
+.react-form .input-area button.top-input, .react-form .add-input button{
 	border: none;
 	border-top-right-radius: 6px;
 	border-bottom-right-radius: 6px;
@@ -100,7 +100,7 @@
 	flex-grow: 0;
 }
 
-.react-form .input-area button:hover, .add-input button:hover, .add-input select:hover{
+.react-form .input-area button:hover, .react-form .add-input button:hover, .react-form .add-input select:hover{
 	cursor: pointer;
 }
 
@@ -147,7 +147,7 @@
 	cursor: pointer;
 }
 
-.react-form .extra-input-gap button, .extra-input-gap .drag-handle{
+.react-form .extra-input-gap button, .react-form .extra-input-gap .drag-handle{
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -183,4 +183,9 @@
 	justify-content: center;
 	width: 100%;
 	border-top: 1px solid grey;
+}
+
+.react-form .drop-scroll{
+	max-height: 340px;
+	overflow-y: scroll;
 }

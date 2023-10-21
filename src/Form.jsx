@@ -74,9 +74,10 @@ const PairsInput = () => {
     <DragDropContext
       onDragEnd={onDragEnd}
     >
-      <Droppable droppableId="droppable">
+      <Droppable droppableId="droppable" >
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
+          <div className="drop-scroll">
             {inputs.map((input, index) => (
               <Draggable key={input.id} draggableId={input.id.toString()} index={index}>
                 {(provided) => (
@@ -121,6 +122,7 @@ const PairsInput = () => {
                 )}
               </Draggable>
             ))}
+            </div>
             {provided.placeholder}
           </div>
         )}
@@ -216,10 +218,11 @@ const Form = () => {
   };
 
   return (
+    <div className="react-form">
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="inputs">
         {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef} id="react-form">
+          <div {...provided.droppableProps} ref={provided.innerRef}>
             {inputs.map((input, index) => (
               <Draggable key={input.id} draggableId={input.id.toString()} index={index}>
                 {(provided) => (
@@ -254,7 +257,7 @@ const Form = () => {
                         className="main-input"
                       />
                     )}
-                  {input.label === "subheading" && (
+                  {input.label === "cards" && (
                     <PairsInput/>
                   )}
                     </div>
@@ -290,6 +293,7 @@ const Form = () => {
           <option value="paragraph">Paragraph</option>
           <option value="photo">Photo (Google Drive)</option>
           <option value="slide">Slide (Google Slides)</option>
+          <option value="cards">Flashcards/Quiz</option>
         </select>
         <button onClick={handleAddButtonClick}><i className="fas fa-plus"></i></button>
       </div>
@@ -297,6 +301,7 @@ const Form = () => {
         <button onClick={handleSubmit}>Submit</button>
       </div>
     </DragDropContext>
+    </div>
   );
 };
 
