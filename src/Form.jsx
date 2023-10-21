@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-
 const PairsInput = () => {
-  return <div>
-  <input type="text"></input> 
-  <input type="text"></input> 
+  const [textareaValue, setTextareaValue] = useState('');
 
+  const handleInput = (event) => {
+    const textarea = event.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 5 + 'px';
+    setTextareaValue(textarea.value);
+  };
 
-  </div>;
+  return (
+    <div>
+      <textarea type="text" onInput={handleInput} className="extra-input"></textarea>
+      <textarea type="text" onInput={handleInput} className="extra-input"></textarea>
+    </div>
+  );
 };
+
+// export default PairsInput;
+
 
 
 
@@ -108,6 +119,7 @@ const Form = () => {
                         placeholder="Enter Paragraph"
                         value={input.value}
                         onChange={(e) => handleInputChange(input.id, e.target.value)}
+                        className="main-input"
                       />
                     ) : (
                       <input
@@ -121,6 +133,7 @@ const Form = () => {
                         }
                         value={input.value}
                         onChange={(e) => handleInputChange(input.id, e.target.value)}
+                        className="main-input"
                       />
                     )}
                   {input.label === "subheading" && (
