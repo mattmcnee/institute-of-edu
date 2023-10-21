@@ -35,3 +35,30 @@ function onYouTubeIframeAPIReady() {
 
 // Load the YouTube API script
 loadYouTubeAPI();
+
+
+
+const jsonData = {
+  "title": "Main Title",
+  "content": [
+    {
+      "section": [
+        {
+          "paragraph": "hello there",
+          "subtitle": "Introduction"
+        }
+      ]
+    },
+    {
+      "section": [
+        {
+          "paragraph": "no th",
+          "subtitle": "Intro"
+        }
+      ]
+    }
+  ]
+};
+
+console.log(jsonData); // You can now use the variable jsonData in your JavaScript code
+

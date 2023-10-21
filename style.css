@@ -150,7 +150,7 @@ overflow-y: scroll;
   width: 100%;
 }
 
-.play-video iframe {
+.play-video .iframe-wrapper iframe {
   position: absolute;
   top: 0;
   left: 0;
@@ -269,4 +269,90 @@ overflow-y: scroll;
 /*	opacity: 0.7;*/
 text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 cursor: pointer;
+}
+
+/*
+
+
+-- Forms --
+
+
+*/
+
+.input-area{
+	border: 1px solid grey;
+	border-radius: 6px;
+	display: flex;
+	position: relative;
+	margin: 10px 20px;
+}
+
+.input-area textarea, .input-area input{
+	flex-grow: 1;
+	border: none;
+	border-radius: 6px;
+	outline: none;
+	margin: 20px 0 5px 10px;
+	font-family: inherit;
+}
+
+.input-area textarea{
+	height: 92px;
+	max-height: 92px;
+	min-height: 15.5px;
+}
+
+.input-area label{
+	position: absolute;
+	top: 4px;
+	left: 8px;
+	font-size: 0.8em;
+	color: #333;
+}
+
+.input-area textarea::placeholder, .input-area input::placeholder{
+    color: #555;
+}
+
+.input-area button, .add-input button{
+	border: none;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+	border-left: 1px solid grey;
+	background-color: transparent;
+	padding: 0 15px;
+}
+
+.input-area button:hover, .add-input button:hover, .add-input select:hover{
+	cursor: pointer;
+}
+
+.add-input{
+	width: 50%;
+	display: flex;
+	margin: 10px 20px;
+	border-radius: 6px;
+	border: 1px solid grey;
+}
+
+.add-input select{
+	flex-grow: 1;
+	border: none;
+	border-radius: 6px;
+	outline: none;
+	padding: 5px 4px;
+	font-size: 0.8em;
+}
+
+.submit-form button{
+	display: flex;
+	padding: 5px 4px;
+	border-radius: 6px;
+	border: 1px solid grey;
+	background-color: transparent;
+	margin: 10px 20px;
+}
+
+.submit-form button:hover{
+	cursor: pointer;
 }

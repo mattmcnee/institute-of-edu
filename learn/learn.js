@@ -45,3 +45,12 @@ if (window.location.hostname === "localhost" || window.location.hostname === "12
     // Code is not running on localhost
     console.log("Not running on localhost");
 }
+
+
+
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from '/src/App.jsx';
+
+
+createRoot(document.getElementById('root')).render(App);
