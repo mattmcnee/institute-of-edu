@@ -1,21 +1,139 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-const PairsInput = () => {
-  const [textareaValue, setTextareaValue] = useState('');
+import './form.css';
 
-  const handleInput = (event) => {
+const PairsInput = () => {
+  const [inputs, setInputs] = useState([{ id: 0, key: 0 }]);
+
+  const handleInput = (event, id, textareaNumber) => {
+    const updatedInputs = inputs.map((input) => {
+      if (input.id === id) {
+        return {
+          ...input,
+          [textareaNumber === 1 ? "textarea1" : "textarea2"]: event.target.value,
+        };
+      }
+      return input;
+    });
+
     const textarea = event.target;
     textarea.style.height = 'auto';
     textarea.style.height = textarea.scrollHeight + 5 + 'px';
-    setTextareaValue(textarea.value);
+
+    setInputs(updatedInputs);
+  };
+
+  const handleSwapButtonClick = (id) => {
+    const updatedInputs = inputs.map((input) => {
+      if (input.id === id) {
+        // Swap textarea1 and textarea2 values
+        return {
+          ...input,
+          textarea1: input.textarea2,
+          textarea2: input.textarea1,
+        };
+      }
+      return input;
+    });
+
+    setInputs(updatedInputs);
+  };
+
+  const addInput = () => {
+    const newIndex = inputs.length;
+    const newInputs = [
+      ...inputs,
+      {
+        id: new Date().getTime(),
+        key: newIndex,
+        textarea1: "",
+        textarea2: "",
+      },
+    ];
+    setInputs(newInputs);
+  };
+
+  const handleDeleteButtonClick = (id) => {
+    const updatedInputs = inputs.filter((input) => input.id !== id);
+    setInputs(updatedInputs);
+  };
+
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const reorderedInputs = Array.from(inputs);
+    const [removed] = reorderedInputs.splice(result.source.index, 1);
+    reorderedInputs.splice(result.destination.index, 0, removed);
+
+    setInputs(reorderedInputs);
   };
 
   return (
-    <div>
-      <textarea type="text" onInput={handleInput} className="extra-input"></textarea>
-      <textarea type="text" onInput={handleInput} className="extra-input"></textarea>
-    </div>
+    <DragDropContext
+      onDragEnd={onDragEnd}
+    >
+      <Droppable droppableId="droppable">
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            {inputs.map((input, index) => (
+              <Draggable key={input.id} draggableId={input.id.toString()} index={index}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    className="extra-input-holder"
+                  >
+                    <div className="textarea">
+                      <textarea
+                        type="text"
+                        onInput={(event) => handleInput(event, input.id, 1)}
+                        value={input.textarea1}
+                        className="extra-input"
+                      ></textarea>
+
+                  </div>
+          <div className="extra-input-gap" >
+            <button onClick={() => handleSwapButtonClick(input.id)}>
+              <i className="fas fa-exchange-alt"></i>
+            </button>
+            
+
+            <div className="drag-handle" {...provided.dragHandleProps}>
+              <i className="fas fa-bars"></i>
+            </div>
+            
+            <button onClick={() => handleDeleteButtonClick(input.id)}>
+              <i className="fas fa-trash-alt"></i>
+            </button>
+          </div>
+          <div className="textarea">
+          <textarea
+            type="text"
+            onInput={(event) => handleInput(event, input.id, 2)}
+            value={input.textarea2}
+            className="extra-input"
+          ></textarea>
+          </div>
+
+            </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+      <div className="extra-input-add">
+        <button onClick={addInput}>
+          <i className="fas fa-plus"></i>
+        </button>
+      </div>
+    </DragDropContext>
+
   );
+
 };
 
 // export default PairsInput;
@@ -101,7 +219,7 @@ const Form = () => {
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="inputs">
         {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
+          <div {...provided.droppableProps} ref={provided.innerRef} id="react-form">
             {inputs.map((input, index) => (
               <Draggable key={input.id} draggableId={input.id.toString()} index={index}>
                 {(provided) => (
@@ -141,12 +259,12 @@ const Form = () => {
                   )}
                     </div>
                       {input.label === "photo" && (
-                        <button onClick={redirectToGoogleDrive}>
+                        <button className="top-input" onClick={redirectToGoogleDrive}>
                           <i className="fas fa-external-link-alt"></i>
                         </button>
                       )}
                       {input.label === "slide" && (
-                        <button onClick={redirectToGoogleSlides}>
+                        <button className="top-input" onClick={redirectToGoogleSlides}>
                           <i className="fas fa-external-link-alt"></i>
                         </button>
                       )}
@@ -154,7 +272,7 @@ const Form = () => {
                       <div className="drag-handle" {...provided.dragHandleProps}>
                         <i className="fas fa-bars"></i>
                       </div>
-                      <button onClick={() => handleDeleteButtonClick(input.id)}>
+                      <button className="top-input" onClick={() => handleDeleteButtonClick(input.id)}>
                         <i className="fas fa-trash-alt"></i>
                       </button>
 
