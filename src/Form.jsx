@@ -1,4 +1,26 @@
 import React, { useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
+const PairsInput = () => {
+  return <div>
+  <input type="text"></input> 
+  <input type="text"></input> 
+
+
+  </div>;
+};
+
+
+
+
+
+
+
+
+
+
+
+
 
 const Form = () => {
   const [selectedOption, setSelectedOption] = useState("subheading");
@@ -52,40 +74,85 @@ const Form = () => {
     window.open("https://slides.google.com", "_blank"); // Opens Google Slides in a new tab
   };
 
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const reorderedInputs = Array.from(inputs);
+    const [removed] = reorderedInputs.splice(result.source.index, 1);
+    reorderedInputs.splice(result.destination.index, 0, removed);
+
+    setInputs(reorderedInputs);
+  };
+
   return (
-    <div>
-      {inputs.map((input) => (
-        <div key={input.id} className="input-area">
-          <label>{capitalizeFirstLetter(input.label)}</label>
-          {input.label === "paragraph" ? (
-            <textarea
-              placeholder="Enter Paragraph"
-              value={input.value}
-              onChange={(e) => handleInputChange(input.id, e.target.value)}
-            />
-          ) : (
-            <input
-              type="text"
-              placeholder={
-                input.label === "photo"
-                  ? "https://drive.google.com/file/..."
-                  : input.label === "slide"
-                  ? "https://docs.google.com/presentation/..."
-                  : `Enter ${input.label}`
-              }
-              value={input.value}
-              onChange={(e) => handleInputChange(input.id, e.target.value)}
-            />
-          )}
-          {input.label === "photo" && (
-            <button onClick={redirectToGoogleDrive}><i class="fas fa-external-link-alt"></i></button>
-          )}
-          {input.label === "slide" && (
-            <button onClick={redirectToGoogleSlides}><i class="fas fa-external-link-alt"></i></button>
-          )}
-          <button onClick={() => handleDeleteButtonClick(input.id)}><i class="fas fa-trash-alt"></i></button>
-        </div>
-      ))}
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="inputs">
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            {inputs.map((input, index) => (
+              <Draggable key={input.id} draggableId={input.id.toString()} index={index}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    className="input-area"
+                  >
+                    <div className="input-header">
+                      <label>{capitalizeFirstLetter(input.label)}</label>
+                    </div>
+                    <div className="top-input">
+                    {input.label === "paragraph" ? (
+                      <textarea
+                        placeholder="Enter Paragraph"
+                        value={input.value}
+                        onChange={(e) => handleInputChange(input.id, e.target.value)}
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        placeholder={
+                          input.label === "photo"
+                            ? "https://drive.google.com/file/..."
+                            : input.label === "slide"
+                            ? "https://docs.google.com/presentation/..."
+                            : `Enter ${input.label}`
+                        }
+                        value={input.value}
+                        onChange={(e) => handleInputChange(input.id, e.target.value)}
+                      />
+                    )}
+                  {input.label === "subheading" && (
+                    <PairsInput/>
+                  )}
+                    </div>
+                      {input.label === "photo" && (
+                        <button onClick={redirectToGoogleDrive}>
+                          <i className="fas fa-external-link-alt"></i>
+                        </button>
+                      )}
+                      {input.label === "slide" && (
+                        <button onClick={redirectToGoogleSlides}>
+                          <i className="fas fa-external-link-alt"></i>
+                        </button>
+                      )}
+                      
+                      <div className="drag-handle" {...provided.dragHandleProps}>
+                        <i className="fas fa-bars"></i>
+                      </div>
+                      <button onClick={() => handleDeleteButtonClick(input.id)}>
+                        <i className="fas fa-trash-alt"></i>
+                      </button>
+
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
       <div className="add-input">
         <select value={selectedOption} onChange={handleSelectChange}>
           <option value="subheading">Subheading</option>
@@ -93,13 +160,14 @@ const Form = () => {
           <option value="photo">Photo (Google Drive)</option>
           <option value="slide">Slide (Google Slides)</option>
         </select>
-        <button onClick={handleAddButtonClick}>Add</button>
+        <button onClick={handleAddButtonClick}><i className="fas fa-plus"></i></button>
       </div>
       <div className="submit-form">
         <button onClick={handleSubmit}>Submit</button>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
+
 
 export default <Form/>;

@@ -279,12 +279,23 @@ cursor: pointer;
 
 */
 
+.form-container{
+	padding-top: 10px;
+}
+
 .input-area{
 	border: 1px solid grey;
 	border-radius: 6px;
 	display: flex;
 	position: relative;
-	margin: 10px 20px;
+	margin: 0px 20px 10px 20px;
+	background-color: white;
+}
+
+.input-area .top-input{
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
 }
 
 .input-area textarea, .input-area input{
@@ -298,8 +309,7 @@ cursor: pointer;
 
 .input-area textarea{
 	height: 92px;
-	max-height: 92px;
-	min-height: 15.5px;
+	resize: none;
 }
 
 .input-area label{
@@ -319,12 +329,25 @@ cursor: pointer;
 	border-top-right-radius: 6px;
 	border-bottom-right-radius: 6px;
 	border-left: 1px solid grey;
-	background-color: transparent;
+	background-color: white;
 	padding: 0 15px;
 }
 
 .input-area button:hover, .add-input button:hover, .add-input select:hover{
 	cursor: pointer;
+}
+
+.input-area .drag-handle{
+	padding: 5px 4px;
+	display: flex;
+	align-items: center;
+	border-left: 1px solid grey;
+	justify-content: center;
+}
+
+.input-area .drag-handle i{
+	flex-grow: 1;
+	margin: 0 10px ;
 }
 
 .add-input{
@@ -349,7 +372,7 @@ cursor: pointer;
 	padding: 5px 4px;
 	border-radius: 6px;
 	border: 1px solid grey;
-	background-color: transparent;
+	background-color: white;
 	margin: 10px 20px;
 }
 
