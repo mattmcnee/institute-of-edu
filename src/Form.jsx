@@ -51,6 +51,15 @@ const PairsInput = () => {
       },
     ];
     setInputs(newInputs);
+    var div = document.getElementById('set-scroll');
+
+    setTimeout(function() {    
+      div.scrollTo({
+        top: div.scrollHeight - div.clientHeight,
+        behavior: 'smooth'
+      });
+    },100); 
+
   };
 
   const handleDeleteButtonClick = (id) => {
@@ -77,7 +86,7 @@ const PairsInput = () => {
       <Droppable droppableId="droppable" >
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
-          <div className="drop-scroll">
+          <div className="drop-scroll" id="set-scroll">
             {inputs.map((input, index) => (
               <Draggable key={input.id} draggableId={input.id.toString()} index={index}>
                 {(provided) => (
