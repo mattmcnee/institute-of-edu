@@ -193,12 +193,16 @@
 	overflow-y: scroll;
 }
 
-.rotate-button.rotated i{
+.react-form .rotate-button.rotated i{
 	transform: rotate(180deg);
 	transition: transform 0.5s ease-in-out;
 }
 
-.rotate-button:not(.rotated) i{
+.react-form .rotate-button:not(.rotated) i{
 	transform: rotate(0deg);
 	transition: transform 0.5s ease-in-out;
+}
+
+.react-form iframe.media-display{
+	border-bottom-left-radius: 6px;
 }

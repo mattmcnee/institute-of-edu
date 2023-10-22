@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import PairsInput from '/src/PairsInput.jsx';
+import MediaInput from '/src/MediaInput.jsx';
 import './form.css';
 
 
@@ -26,28 +27,6 @@ const Form = () => {
     }
     setJsonData(updatedJson);
   };
-
-function extractIds(url) {
-    const regex = /\/d\/([a-zA-Z0-9_-]+)(?:\/edit(?:\?|#)slide=id\.([a-zA-Z0-9_]+))?|\/file\/d\/([a-zA-Z0-9_-]+)\//;
-    const match = url.match(regex);
-
-    const slidesRegex = /\/presentation\/d\/([a-zA-Z0-9_-]+)/;
-    const driveRegex = /\/file\/d\/([a-zA-Z0-9_-]+)/;
-    var type = null;
-    if(url.match(slidesRegex)){
-      type = "slide";
-    }else if(url.match(driveRegex)){
-      type = "photo";
-    }
-
-    if (match) {
-        const mainId = match[1] || match[3];
-        const slideId = match[2] || null;
-        return { mainId, slideId, type };
-    } else {
-        return null;
-    }
-}
 
   const handleSelectChange = (e) => {
     setSelectedOption(e.target.value);
@@ -83,29 +62,13 @@ const handleSubmit = () => {
 
     // Extract data from the matched objects
     const matchedData = matchedObjects.map((matchedItem) => matchedItem.data);
-    if (input.label === "cards" && matchedData.length > 0) {
-      return {
-        label: input.label,
-        value: {"title": input.value, "data": matchedData[0]},
-        id: input.id
-      };
-    } if(input.label === "slide" || input.label === "photo"){
-        return {
-        label: input.label,
-        value: {"title": input.value, "data": extractIds(input.value)},
-        id: input.id
-      };
-    }
+    const newData = (matchedData.length > 0) ? matchedData[0] : null;
 
-
-
-    else {
-      return {
-        label: input.label,
-        value: {"title": input.value, "data": ""},
-        id: input.id
-      };
-    }
+    return {
+      label: input.label,
+      value: {"title": input.value, "data": newData},
+      id: input.id
+    };
   });
 
   console.log("Form Values:", updatedFormValues);
@@ -151,27 +114,17 @@ const handleSubmit = () => {
                   >
                     <div className="top-input">
                     <label>{capitalizeFirstLetter(input.label)}</label>
-                    {input.label === "paragraph" ? (
+                    {input.label === "paragraph" && (
                       <textarea
                         placeholder="Enter Paragraph"
                         value={input.value}
                         onChange={(e) => handleInputChange(input.id, e.target.value)}
                         className="main-input"
                       />
-                    ) : (
-                      <input
-                        type="text"
-                        placeholder={
-                          input.label === "photo"
-                            ? "https://drive.google.com/file/..."
-                            : input.label === "slide"
-                            ? "https://docs.google.com/presentation/..."
-                            : `Enter ${input.label}`
-                        }
-                        value={input.value}
-                        onChange={(e) => handleInputChange(input.id, e.target.value)}
-                        className="main-input"
-                      />
+                    )}
+                  {input.label === "media" && (
+
+                    <MediaInput inputValue={"media"} onJsonData={handleJsonData} blockId={input.id}/>
                     )}
                   {input.label === "cards" && (
                     <PairsInput inputValue={"cards"} onJsonData={handleJsonData} blockId={input.id}/>
@@ -207,8 +160,8 @@ const handleSubmit = () => {
         <select value={selectedOption} onChange={handleSelectChange}>
           <option value="subheading">Subheading</option>
           <option value="paragraph">Paragraph</option>
-          <option value="photo">Photo (Google Drive)</option>
-          <option value="slide">Slide (Google Slides)</option>
+          <option value="media">Photo</option>
+          <option value="media">Slideshow</option>
           <option value="cards">Flashcards/Quiz</option>
         </select>
         <button onClick={handleAddButtonClick}><i className="fas fa-plus"></i></button>
