@@ -85,8 +85,8 @@ const PairsInput = () => {
     >
       <Droppable droppableId="droppable" >
         {(provided) => (
+                    <div className="drop-scroll" id="set-scroll">
           <div {...provided.droppableProps} ref={provided.innerRef}>
-          <div className="drop-scroll" id="set-scroll">
             {inputs.map((input, index) => (
               <Draggable key={input.id} draggableId={input.id.toString()} index={index}>
                 {(provided) => (
