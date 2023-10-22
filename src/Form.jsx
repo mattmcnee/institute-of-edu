@@ -27,6 +27,28 @@ const Form = () => {
     setJsonData(updatedJson);
   };
 
+function extractIds(url) {
+    const regex = /\/d\/([a-zA-Z0-9_-]+)(?:\/edit(?:\?|#)slide=id\.([a-zA-Z0-9_]+))?|\/file\/d\/([a-zA-Z0-9_-]+)\//;
+    const match = url.match(regex);
+
+    const slidesRegex = /\/presentation\/d\/([a-zA-Z0-9_-]+)/;
+    const driveRegex = /\/file\/d\/([a-zA-Z0-9_-]+)/;
+    var type = null;
+    if(url.match(slidesRegex)){
+      type = "slide";
+    }else if(url.match(driveRegex)){
+      type = "photo";
+    }
+
+    if (match) {
+        const mainId = match[1] || match[3];
+        const slideId = match[2] || null;
+        return { mainId, slideId, type };
+    } else {
+        return null;
+    }
+}
+
   const handleSelectChange = (e) => {
     setSelectedOption(e.target.value);
   };
@@ -64,13 +86,23 @@ const handleSubmit = () => {
     if (input.label === "cards" && matchedData.length > 0) {
       return {
         label: input.label,
-        value: matchedData,
+        value: {"title": input.value, "data": matchedData[0]},
         id: input.id
       };
-    } else {
+    } if(input.label === "slide" || input.label === "photo"){
+        return {
+        label: input.label,
+        value: {"title": input.value, "data": extractIds(input.value)},
+        id: input.id
+      };
+    }
+
+
+
+    else {
       return {
         label: input.label,
-        value: input.value,
+        value: {"title": input.value, "data": ""},
         id: input.id
       };
     }
@@ -117,10 +149,8 @@ const handleSubmit = () => {
                     {...provided.draggableProps}
                     className="input-area"
                   >
-                    <div className="input-header">
-                      <label>{capitalizeFirstLetter(input.label)}</label>
-                    </div>
                     <div className="top-input">
+                    <label>{capitalizeFirstLetter(input.label)}</label>
                     {input.label === "paragraph" ? (
                       <textarea
                         placeholder="Enter Paragraph"

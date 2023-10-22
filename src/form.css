@@ -28,7 +28,7 @@
 	border: none;
 	border-radius: 6px;
 	outline: none;
-	margin: 20px 0 5px 10px;
+	margin: 0 0 5px 10px;
 	font-family: inherit;
 }
 
@@ -38,11 +38,9 @@
 }
 
 .react-form .input-area label{
-	position: absolute;
-	top: 4px;
-	left: 8px;
 	font-size: 0.8em;
 	color: #333;
+	padding: 6px 8px;
 }
 
 .react-form .input-area .extra-input{
@@ -55,7 +53,6 @@
 	border-radius: 0;
 	border: none;
 	flex-grow: 0;
-
 	margin: 0;
 }
 
