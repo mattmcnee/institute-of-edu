@@ -1,13 +1,19 @@
+:root{
+  --form-outline: #aaa;
+  --form-outline-bold: #888;
+}
+
+
 .react-form{
 	padding-top: 10px;
 }
 
 .react-form .input-area{
-	border: 1px solid grey;
+	border: 1px solid var(--form-outline-bold);
 	border-radius: 6px;
 	display: flex;
 	position: relative;
-	margin: 0px 20px 10px 20px;
+	margin: 0px 20px 20px 20px;
 	background-color: white;
 }
 
@@ -66,7 +72,7 @@
 .react-form .input-area .extra-input-holder{
 	display: flex;
 	flex-direction: row;
-	border: 1px solid grey;
+	border: 1px solid var(--form-outline-bold);
 	border-radius: 6px;
 	margin: 0 20px 20px 20px;
 	background-color: white;
@@ -79,8 +85,8 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	border-left: 1px solid grey;
-	border-right: 1px solid grey;
+	border-left: 1px solid var(--form-outline);
+	border-right: 1px solid var(--form-outline);
 }
 
 .react-form .input-area textarea::placeholder, .react-form .input-area input::placeholder{
@@ -91,7 +97,7 @@
 	border: none;
 	border-top-right-radius: 6px;
 	border-bottom-right-radius: 6px;
-	border-left: 1px solid grey;
+	border-left: 1px solid var(--form-outline-bold);
 	background-color: white;
 	padding: 0 15px;
 	display: flex;
@@ -108,7 +114,7 @@
 	padding: 5px 4px;
 	display: flex;
 	align-items: center;
-	border-left: 1px solid grey;
+	border-left: 1px solid var(--form-outline-bold);
 	justify-content: center;
 }
 
@@ -122,7 +128,7 @@
 	display: flex;
 	margin: 10px 20px;
 	border-radius: 6px;
-	border: 1px solid grey;
+	border: 1px solid var(--form-outline);
 }
 
 .react-form .add-input select{
@@ -138,7 +144,7 @@
 	display: flex;
 	padding: 5px 4px;
 	border-radius: 6px;
-	border: 1px solid grey;
+	border: 1px solid var(--form-outline);
 	background-color: white;
 	margin: 10px 20px;
 }
@@ -154,7 +160,7 @@
 	padding: 8px 6px;
 	border-radius: 0;
 	border: none;
-	border-bottom: 1px solid grey;
+	border-bottom: 1px solid var(--form-outline);
 	background-color: white;
 	flex-grow: 1;
 	width: 100%;
@@ -182,10 +188,20 @@
 	align-items: center;
 	justify-content: center;
 	width: 100%;
-	border-top: 1px solid grey;
+	border-top: 1px solid var(--form-outline-bold);
 }
 
 .react-form .drop-scroll{
 	max-height: 340px;
 	overflow-y: scroll;
+}
+
+.rotate-button.rotated i{
+	transform: rotate(180deg);
+	transition: transform 0.5s ease-in-out;
+}
+
+.rotate-button:not(.rotated) i{
+	transform: rotate(0deg);
+	transition: transform 0.5s ease-in-out;
 }

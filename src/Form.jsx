@@ -1,170 +1,31 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import PairsInput from '/src/PairsInput.jsx';
 import './form.css';
-
-const PairsInput = () => {
-  const [inputs, setInputs] = useState([{ id: 0, key: 0 }]);
-
-  const handleInput = (event, id, textareaNumber) => {
-    const updatedInputs = inputs.map((input) => {
-      if (input.id === id) {
-        return {
-          ...input,
-          [textareaNumber === 1 ? "textarea1" : "textarea2"]: event.target.value,
-        };
-      }
-      return input;
-    });
-
-    const textarea = event.target;
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 5 + 'px';
-
-    setInputs(updatedInputs);
-  };
-
-  const handleSwapButtonClick = (id) => {
-    const updatedInputs = inputs.map((input) => {
-      if (input.id === id) {
-        // Swap textarea1 and textarea2 values
-        return {
-          ...input,
-          textarea1: input.textarea2,
-          textarea2: input.textarea1,
-        };
-      }
-      return input;
-    });
-
-    setInputs(updatedInputs);
-  };
-
-  const addInput = () => {
-    const newIndex = inputs.length;
-    const newInputs = [
-      ...inputs,
-      {
-        id: new Date().getTime(),
-        key: newIndex,
-        textarea1: "",
-        textarea2: "",
-      },
-    ];
-    setInputs(newInputs);
-    var div = document.getElementById('set-scroll');
-
-    setTimeout(function() {    
-      div.scrollTo({
-        top: div.scrollHeight - div.clientHeight,
-        behavior: 'smooth'
-      });
-    },100); 
-
-  };
-
-  const handleDeleteButtonClick = (id) => {
-    const updatedInputs = inputs.filter((input) => input.id !== id);
-    setInputs(updatedInputs);
-  };
-
-  const onDragEnd = (result) => {
-    if (!result.destination) {
-      return;
-    }
-
-    const reorderedInputs = Array.from(inputs);
-    const [removed] = reorderedInputs.splice(result.source.index, 1);
-    reorderedInputs.splice(result.destination.index, 0, removed);
-
-    setInputs(reorderedInputs);
-  };
-
-  return (
-    <DragDropContext
-      onDragEnd={onDragEnd}
-    >
-      <Droppable droppableId="droppable" >
-        {(provided) => (
-                    <div className="drop-scroll" id="set-scroll">
-          <div {...provided.droppableProps} ref={provided.innerRef}>
-            {inputs.map((input, index) => (
-              <Draggable key={input.id} draggableId={input.id.toString()} index={index}>
-                {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    className="extra-input-holder"
-                  >
-                    <div className="textarea">
-                      <textarea
-                        type="text"
-                        onInput={(event) => handleInput(event, input.id, 1)}
-                        value={input.textarea1}
-                        className="extra-input"
-                      ></textarea>
-
-                  </div>
-          <div className="extra-input-gap" >
-            <button onClick={() => handleSwapButtonClick(input.id)}>
-              <i className="fas fa-exchange-alt"></i>
-            </button>
-            
-
-            <div className="drag-handle" {...provided.dragHandleProps}>
-              <i className="fas fa-bars"></i>
-            </div>
-            
-            <button onClick={() => handleDeleteButtonClick(input.id)}>
-              <i className="fas fa-trash-alt"></i>
-            </button>
-          </div>
-          <div className="textarea">
-          <textarea
-            type="text"
-            onInput={(event) => handleInput(event, input.id, 2)}
-            value={input.textarea2}
-            className="extra-input"
-          ></textarea>
-          </div>
-
-            </div>
-                )}
-              </Draggable>
-            ))}
-            </div>
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-      <div className="extra-input-add">
-        <button onClick={addInput}>
-          <i className="fas fa-plus"></i>
-        </button>
-      </div>
-    </DragDropContext>
-
-  );
-
-};
-
-// export default PairsInput;
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 const Form = () => {
   const [selectedOption, setSelectedOption] = useState("subheading");
   const [inputs, setInputs] = useState([]);
+  const [jsonData, setJsonData] = useState([]);
+
+  const handleJsonData = (data) => {
+    var updatedJson;
+    const newJson = [...jsonData];
+    const isIdExists = newJson.some(item => item.id === data.id);
+    if (isIdExists) {
+      updatedJson = newJson.map(item => {
+        if (item.id === data.id) {
+          return data; // Replace existing object with the same id
+        }
+        return item;
+      });
+    }
+    else{
+      updatedJson = [...jsonData, data];
+    }
+    setJsonData(updatedJson);
+  };
 
   const handleSelectChange = (e) => {
     setSelectedOption(e.target.value);
@@ -175,7 +36,7 @@ const Form = () => {
     newInputs.push({
       id: new Date().getTime(),
       label: selectedOption,
-      value: "", // Initialize input value as an empty string
+      value: "",
     });
     setInputs(newInputs);
     console.log("Selected Option:", selectedOption);
@@ -193,14 +54,30 @@ const Form = () => {
     setInputs(updatedInputs);
   };
 
-  const handleSubmit = () => {
-    // Gather all form values for submission
-    const formValues = inputs.map((input) => ({
-      label: input.label,
-      value: input.value,
-    }));
-    console.log("Form Values:", formValues);
-  };
+const handleSubmit = () => {
+  const updatedFormValues = inputs.map((input) => {
+    // Find all objects in jsonData where id matches input.id
+    const matchedObjects = jsonData.filter((item) => item.id === input.id);
+
+    // Extract data from the matched objects
+    const matchedData = matchedObjects.map((matchedItem) => matchedItem.data);
+    if (input.label === "cards" && matchedData.length > 0) {
+      return {
+        label: input.label,
+        value: matchedData,
+        id: input.id
+      };
+    } else {
+      return {
+        label: input.label,
+        value: input.value,
+        id: input.id
+      };
+    }
+  });
+
+  console.log("Form Values:", updatedFormValues);
+};
 
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -267,7 +144,7 @@ const Form = () => {
                       />
                     )}
                   {input.label === "cards" && (
-                    <PairsInput/>
+                    <PairsInput inputValue={"cards"} onJsonData={handleJsonData} blockId={input.id}/>
                   )}
                     </div>
                       {input.label === "photo" && (
